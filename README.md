@@ -6,11 +6,11 @@ This repository is a demonstration of using the Django REST Framework in order t
 Tasks
 =====
 
-  1) Set up git repository
-  2) Set up virtualenv for development, and create a new Django/DRF project. Also add the data to be served
-  3) Flesh out a design for the API application (models, views, serializers etc.)
-  4) Impliment simple API endpoint to serve town list
-  5) Add enhancements (pagination, filtering etc.)
-  6) Add aggregation API endpoint
-  7) Wrap the project in docker for deployment
-  8) Tidy everything up, and recheck documentation/comments
+  1. ~~Set up git repository~~
+  2. ~~Set up virtualenv for development, and create a new Django/DRF project. Also add the data to be served~~
+  3. Flesh out a design for the API application (models, views, serializers etc.)
+  4. Impliment simple API endpoint to serve town list
+  5. Add enhancements (pagination, filtering etc.)
+  6. Add aggregation API endpoint
+  7. Wrap the project in docker for deployment
+  8. Tidy everything up, and recheck documentation/comments
