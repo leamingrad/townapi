@@ -1,4 +1,4 @@
-Region Code,Region Name,Code Department,Code District,Code town,Town Name,Population
+region_code,region_name,department_code,district_code,town_code,town_name,population
 84,Auvergne-Rhône-Alpes,1,2,1,L' Abergement-Clémenciat,785
 84,Auvergne-Rhône-Alpes,1,1,2,L' Abergement-de-Varey,241
 84,Auvergne-Rhône-Alpes,1,1,4,Ambérieu-en-Bugey,"14,557"
