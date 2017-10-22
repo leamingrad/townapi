@@ -6,8 +6,13 @@
     - /towns - Return the full list of towns
 """
 from django.conf.urls import url
-from .views import TownsView
+from .views import (DepartmentAggsView, DistrictAggsView, RegionAggsView,
+                    TownAggsView, TownsView)
 
 urlpatterns = [
-    url(r'^towns/?$', TownsView.as_view())
+    url(r'^towns/?$', TownsView.as_view()),
+    url(r'^aggs/regions/?$', RegionAggsView.as_view()),
+    url(r'^aggs/departments/?$', DepartmentAggsView.as_view()),
+    url(r'^aggs/districts/?$', DistrictAggsView.as_view()),
+    url(r'^aggs/towns/?$', TownAggsView.as_view()),
 ]

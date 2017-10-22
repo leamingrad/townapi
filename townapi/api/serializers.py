@@ -5,7 +5,7 @@
     serializer for each API endpoint.
 """
 from rest_framework import serializers
-from .models import Town
+from .models import Department, District, Region, Town
 """
 Add the following serializers:
 - AggsSerializer - Custom serializer to pack the required aggregate data into
@@ -53,3 +53,48 @@ class TownSerializer(serializers.ModelSerializer):
                   "department_code",
                   "region_code",
                   "region_name")
+
+
+class AggsSerializer(serializers.ModelSerializer):
+    """
+        This serializer returns the aggregates mix/max average population,
+        and the identifying information (code) for whatever we are
+        aggregating over.
+
+        This is used as a base class for individual model aggregators,
+        as you cannot force DRF serializers to work with one model.
+    """
+    class Meta:
+        """
+            Get the annotated fields from any model..
+        """
+        fields = ("code",)
+                  #"min_population",
+                  #"max_population",
+                  #"avg_population")
+
+
+class RegionAggsSerializer(AggsSerializer):
+    """ Regions have a name field, so also return that """
+    class Meta(AggsSerializer.Meta):
+        model = Region
+        fields = AggsSerializer.Meta.fields + ("name", )
+
+
+class DepartmentAggsSerializer(AggsSerializer):
+    """ Departments do not have a name """
+    class Meta(AggsSerializer.Meta):
+        model = Department
+
+
+class DistrictAggsSerializer(AggsSerializer):
+    """ Districts do not have a name """
+    class Meta(AggsSerializer.Meta):
+        model = District
+
+
+class TownAggsSerializer(AggsSerializer):
+    """ Towns have a name field, so also return that """
+    class Meta(AggsSerializer.Meta):
+        model = Town
+        fields = AggsSerializer.Meta.fields + ("name", )

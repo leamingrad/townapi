@@ -22,6 +22,39 @@ from django.db import models
 from .constants import FR_REGION_CODES
 
 
+class Place(models.Model):
+    """
+        This abscract model contains utility functions for calculating
+        aggregate data from towns.
+    """
+    def get_towns(self):
+        """
+            Method to get a QuerySet that will give all the towns in this
+            place.
+
+            This method MUST be overriden by children
+            TODO: Enforce overriding.
+
+            :returns: A QuerySet of Town objects
+        """
+        pass
+
+    def get_max_population(self):
+        """ Using the QuerySet of towns, get the maximum population """
+        return self.get_towns().aggregate(models.Max('population'))
+
+    def get_min_population(self):
+        """ Using the QuerySet of towns, get the minimum population """
+        return self.get_towns().aggregate(models.Min('population'))
+
+    def get_avg_population(self):
+        """ Using the QuerySet of towns, get the average population """
+        return self.get_towns().aggregate(models.Avg('population'))
+
+    class Meta:
+        abstract = True
+
+
 class Region(models.Model):
     """
         This represents a region in France, of which there are exactly 18 (13
