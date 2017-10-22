@@ -12,6 +12,9 @@
       there is no need to test basic CRUD operations.
 """
 from django.test import TestCase
+from rest_framework.test import APIClient
+from rest_framework import status
+
 from .management.commands._utils import (get_towns_from_csv,
                                          save_town_and_parents_to_db)
 from .models import Department, District, Region, Town
@@ -45,3 +48,38 @@ class ModelTestCase(TestCase):
             save_town_and_parents_to_db(town)
 
         self.assertEqual(Town.objects.count(), len(towns))
+
+
+class TownsViewTestCase(TestCase):
+    """ Test suite for the Town api view (available at /towns). """
+
+    def setUp(self):
+        """
+            Define the test API Client to use and check that we are working
+            with a clean database
+        """
+        self.assertEqual(Department.objects.count(), 0)
+        self.assertEqual(District.objects.count(), 0)
+        self.assertEqual(Region.objects.count(), 0)
+        self.assertEqual(Town.objects.count(), 0)
+        self.client = APIClient()
+
+    def test_api_csv_validate(self):
+        """
+            Check that all towns in the CSV file can be created using
+            the class-based interface and then retrieved over the API
+        """
+        towns = get_towns_from_csv()
+
+        for i, town in enumerate(towns):
+            # Create
+            save_town_and_parents_to_db(town)
+
+            # Enumeration is zero-indexed, so add 1 here
+            self.assertEqual(Town.objects.count(), i + 1)
+
+            # Retrieve (overriding pagination)
+            response = self.client.get("/towns?limit=100000")
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.json()["results"][-1], town)
+            self.assertEqual(response.json()["count"], i + 1)

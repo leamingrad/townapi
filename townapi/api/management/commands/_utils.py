@@ -15,7 +15,7 @@ CSV_FILE_PATH = os.path.join(os.path.dirname(__file__),
                              "..",
                              "data",
                              "towns.csv")
-CSV_INT_FIELDS = ["population"]
+CSV_INT_FIELDS = ["population", ]
 
 
 def get_towns_from_csv():

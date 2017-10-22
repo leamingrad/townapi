@@ -4,6 +4,7 @@
     This file declares views for the api app.
 """
 from rest_framework import generics
+from .pagination import OneHundredResultsLimitOffsetPagination
 from .serializers import TownSerializer
 from .models import Town
 
@@ -21,3 +22,4 @@ class TownsView(generics.ListAPIView):
                                    'district__department',
                                    'district__department__region')
     serializer_class = TownSerializer
+    pagination_class = OneHundredResultsLimitOffsetPagination

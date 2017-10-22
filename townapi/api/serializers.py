@@ -21,8 +21,17 @@ class TownSerializer(serializers.ModelSerializer):
         Since we want a flat representation, we have to declare the parent
         fields manually, since DRF does not support the foreign_key__field
         syntax.
+
+        The field logic is fairly simple:
+        - All identifying codes are sent as strings (even if they are stored
+          as integers)
+        - Names are sent as strings
+        - Properties are sent as the appropriate type (e.g. population is sent
+          as an integer)
     """
-    district_code = serializers.IntegerField(source="district.code")
+    town_code = serializers.CharField(source="code")
+    town_name = serializers.CharField(source="name")
+    district_code = serializers.CharField(source="district.code")
     department_code = serializers.CharField(
         source="district.department.code")
     region_code = serializers.CharField(
@@ -37,8 +46,8 @@ class TownSerializer(serializers.ModelSerializer):
             Manually declare the list of fields in case the models change.
         """
         model = Town
-        fields = ("code",
-                  "name",
+        fields = ("town_code",
+                  "town_name",
                   "population",
                   "district_code",
                   "department_code",
