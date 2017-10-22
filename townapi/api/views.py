@@ -16,5 +16,8 @@ Views to create:
 
 class TownsView(generics.ListAPIView):
     """ Standard list endpoint to return a list of all Town objects """
-    queryset = Town.objects.all()
+    queryset = Town.objects.all() \
+                   .select_related('district',
+                                   'district__department',
+                                   'district__department__region')
     serializer_class = TownSerializer
