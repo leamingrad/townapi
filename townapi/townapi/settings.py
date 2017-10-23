@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'api',
-    'debug_toolbar'
 ]
 
 MIDDLEWARE = [
@@ -50,10 +49,15 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
-INTERNAL_IPS = ('127.0.0.1', 'localhost',)
+# Only install the debug toolbar if we are not in production
+if DEBUG:
+    INSTALLED_APPS.append('debug_toolbar')
+    MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+    INTERNAL_IPS = ['127.0.0.1', 'localhost']
+    if "DOCKER_HOST" in os.environ:
+        INTERNAL_IPS.append(os.environ["DOCKER_HOST"])
 
 ROOT_URLCONF = 'townapi.urls'
 

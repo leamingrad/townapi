@@ -17,8 +17,13 @@ import debug_toolbar
 from django.conf.urls import url, include
 from django.contrib import admin
 
+from .settings import DEBUG
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('api.urls')),
-    url(r'^__debug__/', include(debug_toolbar.urls)),
 ]
+
+# Only add the debug toolbar URLs if we need to
+if DEBUG:
+    urlpatterns.append(url(r'^__debug__/', include(debug_toolbar.urls)))
