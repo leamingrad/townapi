@@ -64,14 +64,18 @@ class AggsSerializer(serializers.ModelSerializer):
         This is used as a base class for individual model aggregators,
         as you cannot force DRF serializers to work with one model.
     """
+    min_population = serializers.IntegerField()
+    max_population = serializers.IntegerField()
+    avg_population = serializers.IntegerField()
+
     class Meta:
         """
             Get the annotated fields from any model..
         """
-        fields = ("code",)
-                  #"min_population",
-                  #"max_population",
-                  #"avg_population")
+        fields = ("code",
+                  "min_population",
+                  "max_population",
+                  "avg_population")
 
 
 class RegionAggsSerializer(AggsSerializer):

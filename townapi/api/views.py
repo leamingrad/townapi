@@ -47,34 +47,37 @@ class RegionAggsView(AggsView):
     """ Aggregate across regions """
     serializer_class = RegionAggsSerializer
     queryset = Region.objects.annotate(
-        Min('department__district__town__population'),
-        Max('department__district__town__population'),
-        Avg('department__district__town__population'),
-        Count('department__district__town'))
+        min_population=Min('department__district__town__population'),
+        max_population=Max('department__district__town__population'),
+        avg_population=Avg('department__district__town__population'),
+        town_count=Count('department__district__town'))
 
 
 class DepartmentAggsView(AggsView):
     """ Aggregate across departments """
     serializer_class = DepartmentAggsSerializer
-    queryset = Department.objects.annotate(Min('district__town__population'),
-                                           Max('district__town__population'),
-                                           Avg('district__town__population'),
-                                           Count('district__town'))
+    queryset = Department.objects.annotate(
+        min_population=Min('district__town__population'),
+        max_population=Max('district__town__population'),
+        avg_population=Avg('district__town__population'),
+        town_count=Count('district__town'))
 
 
 class DistrictAggsView(AggsView):
     """ Aggregate across districts """
     serializer_class = DistrictAggsSerializer
-    queryset = District.objects.annotate(Min('town__population'),
-                                         Max('town__population'),
-                                         Avg('town__population'),
-                                         Count('town'))
+    queryset = District.objects.annotate(
+        min_population=Min('town__population'),
+        max_population=Max('town__population'),
+        avg_population=Avg('town__population'),
+        town_count=Count('town'))
 
 
 class TownAggsView(AggsView):
     """ Aggregate across a single town """
     serializer_class = TownAggsSerializer
-    queryset = Town.objects.annotate(min_population=F('population'),
-                                     max_population=F('population'),
-                                     avg_population=F('population'),
-                                     town_count=Value(1))
+    queryset = Town.objects.annotate(
+        min_population=F('population'),
+        max_population=F('population'),
+        avg_population=F('population'),
+        town_count=Value(1))

@@ -1,10 +1,25 @@
-townapi
--------
+# townapi
 
 This repository is a demonstration of using the Django REST Framework in order to create a simple REST API.
 
-Tasks
-=====
+## Usage
+
+The repository provides a (very simple) Dockerfile to run the API. It can be run using the following commands:
+
+    $> docker build -t leamingrad/townapi .
+    $> docker run -p 8000:8000 leamingrad/townapi
+
+For details of what endpoints are provided, see [Available Endpoints][Available Endpoints].
+
+## Available Endpoints
+
+The API provides two endpoints that can be queried (every other URL will return a 404).
+
+### /towns
+
+A list of French towns and cities is available at `/towns`.
+
+## Tasks
 
   1. ~~Set up git repository~~
   2. ~~Set up virtualenv for development, and create a new Django/DRF project. Also add the data to be served~~
