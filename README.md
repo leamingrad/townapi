@@ -13,7 +13,15 @@ For details of what endpoints are provided, see [Available Endpoints](#Available
 
 ## Running Tests
 
-To run unit tests for the different functions of the API, the following commands can be used
+**Note:** Running tests is not containerised, so I would suggest doing the following in a virtualenv.
+
+To run unit tests for the different functions of the API, the following commands can be used:
+
+    $> pip3 install -r requirements.txt
+    $> cd townapi
+    $> python3 manage.py test
+
+For details of this tests are declared, see [the api app tests](testapi/api/tests.py).
 
 ## Available Endpoints
 
@@ -60,6 +68,29 @@ Multiple filters can be chained using `&` characters. Available filters are:
 
 Pagination, ordering and filtering can be accessed using the browser GUI.
 
+### /aggs
+
+Four aggregation endpoints are provided, one for each level of administration. They are accessible at the different sub-domains, as follows:
+
+- `/aggs/regions` - Aggregate by region
+- `/aggs/departments` - Aggregate by department
+- `/aggs/districts` - Aggregate by district
+- `/aggs/towns` - Aggregate by town
+
+> Note that since district and town codes are non-unique, aggregating across them will not produce useful data unless filters are used (see below).
+
+For each aggregation, the following JSON record (for example) is provided for each place:
+
+    {
+        "code": 1,
+        "min_population": 1097,
+        "max_population": 56581,
+        "avg_population": 12709,
+        "name": "Guadeloupe"
+    }
+
+> Note that `name` will be omitted if the administrative level does not have a name in the dataset (at the moment, only Regions and Towns have a name).
+
 ## Task List
 
   1. ~~Set up git repository~~
@@ -68,7 +99,13 @@ Pagination, ordering and filtering can be accessed using the browser GUI.
   4. ~~Impliment simple API endpoint to serve town list~~
       - ~~Add a management script to bulk-import the CSV data~~
       - ~~Add tests as objects are added~~
-  5. Add enhancements (pagination, filtering etc.)
+  5. ~~Add enhancements (pagination, filtering etc.)~~
   6. ~~Add aggregation API endpoint~~
   7. ~~Wrap the project in docker for deployment~~
   8. Tidy everything up, and recheck documentation/comments
+      - Add filtering to the aggs API
+      - Tidy up aggregate classes
+      - Make /aggs return a list of URLs in JSON
+      - Document possible extensions
+  9. Move to production ready
+      - Disable DEBUG
