@@ -29,15 +29,19 @@ class TownSerializer(serializers.ModelSerializer):
         - Properties are sent as the appropriate type (e.g. population is sent
           as an integer)
     """
-    town_code = serializers.CharField(source="code")
-    town_name = serializers.CharField(source="name")
-    district_code = serializers.CharField(source="district.code")
+    town_code = serializers.CharField(source="code", label="Town Code")
+    town_name = serializers.CharField(source="name", label="Town Name")
+    district_code = serializers.CharField(source="district.code",
+                                          label="District Code")
     department_code = serializers.CharField(
-        source="district.department.code")
+        source="district.department.code",
+        label="Department Code")
     region_code = serializers.CharField(
-        source="district.department.region.get_code_display")
+        source="district.department.region.get_code_display",
+        label="Region Code")
     region_name = serializers.CharField(
-        source="district.department.region.name")
+        source="district.department.region.name",
+        label="Region Name")
 
     class Meta:
         """

@@ -3,16 +3,18 @@
 
     This file declares views for the api app.
 """
+from django_filters import rest_framework as filters
 from rest_framework import generics
 
 from django.db.models import Avg, Count, F, Max, Min, Value
 from rest_framework.filters import OrderingFilter
 
+from .filters import TownFilter
+from .models import Department, District, Region, Town
 from .pagination import OneHundredResultsLimitOffsetPagination
 from .serializers import (DepartmentAggsSerializer, DistrictAggsSerializer,
                           RegionAggsSerializer, TownAggsSerializer,
                           TownSerializer, AggsSerializer)
-from .models import Department, District, Region, Town
 
 """
 Views to create:
@@ -29,7 +31,8 @@ class TownsView(generics.ListAPIView):
                                    'district__department__region')
     serializer_class = TownSerializer
     pagination_class = OneHundredResultsLimitOffsetPagination
-    filter_backends = (OrderingFilter,)
+    filter_backends = (OrderingFilter, filters.DjangoFilterBackend, )
+    filter_class = TownFilter
 
 
 class AggsView(generics.ListAPIView):
