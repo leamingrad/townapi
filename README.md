@@ -4,18 +4,18 @@ This repository is a demonstration of using the Django REST Framework in order t
 
 **Table of Contents**
 
-- [Usage](#)
-- [Running Tests](#)
-- [The Stack](#)
-- [Available Endpoints](#)
-    - [/towns](#)
-    - [/aggs](#)
-- [Extensions](#)
-    - [Productising](#)
-    - [Documentation](#)
-    - [Providing An SDK](#)
-    - [Interraction With Other API Types](#)
-- [Task List](#)
+- [Usage](#Usage)
+- [Running Tests](#Running-Tests)
+- [The Stack](#The-Stack)
+- [Available Endpoints](#Available-Endpoints)
+    - [/towns](#/towns)
+    - [/aggs](#/aggs)
+- [Extensions](#Extensions)
+    - [Productising](#Productising)
+    - [Documentation](#Documentation)
+    - [Providing An SDK](#Providing-An-SDK)
+    - [Interraction With Other API Types](#Interraction-With-Other-API-Types)
+- [Task List](#Task-List)
 
 ## Usage
 
