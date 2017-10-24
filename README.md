@@ -23,6 +23,12 @@ To run unit tests for the different functions of the API, the following commands
 
 For details of this tests are declared, see [the api app tests](testapi/api/tests.py).
 
+## The Stack
+
+This API is built as a Django application, using the Django Rest Framework to provide the REST API. It also makes use of django-filters for filtering, and Markdown for displaying the endpoint help.
+
+Since this is only a demonstration, the inbuild Django webserver and default sqlite database have been used - for what would be needed in production see [Productising](#Productising).
+
 ## Available Endpoints
 
 The API provides two endpoints that can be queried (every other URL will return a 404). Visiting the endpoint in the browser will give a version of the below documentation.
@@ -77,19 +83,64 @@ Four aggregation endpoints are provided, one for each level of administration. T
 - `/aggs/districts` - Aggregate by district
 - `/aggs/towns` - Aggregate by town
 
-> Note that since district and town codes are non-unique, aggregating across them will not produce useful data unless filters are used (see below).
-
-For each aggregation, the following JSON record (for example) is provided for each place:
+For each aggregation, the following JSON record (for example) is provided:
 
     {
         "code": 1,
         "min_population": 1097,
         "max_population": 56581,
         "avg_population": 12709,
+        "town_count": 32,
         "name": "Guadeloupe"
     }
 
 > Note that `name` will be omitted if the administrative level does not have a name in the dataset (at the moment, only Regions and Towns have a name).
+
+For places at lower administrative levels, all parent codes will also be included for reference (for example, Districts will have a `district_code`, a `department_code` and a `code`).
+
+Filtering can be done using the same syntax as the [/towns](#/towns) endpoint, with the following fields available to filter on:
+- Region Code
+- Department Code
+- District Code
+
+Each level of filtering is only available in the lower administrative divisions (for example, Department filtering is only available for District and Town aggregation).
+
+## Extensions
+
+### Productising
+
+This repository contains a very basic API, and some of the code is a bit rough. To get it ready for production, the following would need to be done:
+- Tidy up aggregation class code (it should be possible to make use of inheritence more)
+    - This may require framework extensions though, so is not urgent
+- Switch to a production-ready web server (probably Gunicorn)
+- Switch to a production-ready database (probably postgres SQL for this sort of data)
+- Add some overview documentation, and link to it
+
+### Documentation
+
+At the moment, the endpoints are documented directly using the DRF's comment-based documentation system. This is good, as it keeps the documentation with the code, so it is harder for them to get out of sync.
+
+To generate more comprehensive human documentation, Sphinx could be used to combine these comments with some handwritten markdown files that give an overview of the API. This could then be served as a static site at a separate location.
+
+Further than that, a Swagger file (and interactive endpoint) could be generated for the API using the django-rest-swagger package with little trouble.
+
+### Providing An SDK
+
+It would be fairly simple to release an SDK for a variety of languages from this endpoint. Once a Swagger file had been generated for the API, then the process of releasing a new SDK language would be:
+
+- Perform basic autogeneration from the Swagger file using swagger-codegen
+- Add any additional swagger-codegen classes required to make the output as useful as possible
+- Add some unit tests to validate the SDK function against the API (and to make sure the interface does not change too much)
+- Add user documentation, including some simple worked examples
+- Add compilation and publishing of the above to CI, so that any API changes will cause a new version of the SDK to be built and published
+
+### Interraction With Other API Types
+
+While this repository gives a HTTP REST API, other types of HTTP API could have been used.
+
+Of the most common, a SOAP-XML API would be a viable alternative to REST, as the data that a SOAP API is designed to carry is similar to a REST API. However, doing so would be harder than writing the REST API, as there are fewer frameworks to create them easily (at least few with the ease of use of DRF).
+
+A RPC-based API (XML or JSON) would also be technically possible, but at the size of data object that this repository uses, the benefits of terseness would be minimal.
 
 ## Task List
 
@@ -102,10 +153,8 @@ For each aggregation, the following JSON record (for example) is provided for ea
   5. ~~Add enhancements (pagination, filtering etc.)~~
   6. ~~Add aggregation API endpoint~~
   7. ~~Wrap the project in docker for deployment~~
-  8. Tidy everything up, and recheck documentation/comments
-      - Add filtering to the aggs API
-      - Tidy up aggregate classes
-      - Make /aggs return a list of URLs in JSON
-      - Document possible extensions
-  9. Move to production ready
-      - Disable DEBUG
+  8. ~~Tidy everything up, and recheck documentation/comments~~
+      - ~~Add filtering to the aggs API~~
+      - ~~Document possible extensions~~
+  9. ~~Move to production ready~~
+      - ~~Disable DEBUG~~

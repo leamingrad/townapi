@@ -71,6 +71,7 @@ class AggsSerializer(serializers.ModelSerializer):
     min_population = serializers.IntegerField()
     max_population = serializers.IntegerField()
     avg_population = serializers.IntegerField()
+    town_count = serializers.IntegerField()
 
     class Meta:
         """
@@ -79,11 +80,15 @@ class AggsSerializer(serializers.ModelSerializer):
         fields = ("code",
                   "min_population",
                   "max_population",
-                  "avg_population")
+                  "avg_population",
+                  "town_count")
 
 
 class RegionAggsSerializer(AggsSerializer):
     """ Regions have a name field, so also return that """
+    code = serializers.CharField(source="get_code_display",
+                                 label="Code")
+
     class Meta(AggsSerializer.Meta):
         model = Region
         fields = AggsSerializer.Meta.fields + ("name", )
@@ -91,18 +96,42 @@ class RegionAggsSerializer(AggsSerializer):
 
 class DepartmentAggsSerializer(AggsSerializer):
     """ Departments do not have a name """
+    region_code = serializers.CharField(source="region.get_code_display",
+                                        label="Region Code")
+
     class Meta(AggsSerializer.Meta):
         model = Department
+        fields = AggsSerializer.Meta.fields + ("region_code", )
 
 
 class DistrictAggsSerializer(AggsSerializer):
     """ Districts do not have a name """
+    region_code = serializers.CharField(
+        source="department.region.get_code_display",
+        label="Region Code")
+    department_code = serializers.CharField(source="department.code",
+                                            label="Department Code")
+
     class Meta(AggsSerializer.Meta):
         model = District
+        fields = AggsSerializer.Meta.fields + ("region_code",
+                                               "department_code")
 
 
 class TownAggsSerializer(AggsSerializer):
     """ Towns have a name field, so also return that """
+    region_code = serializers.CharField(
+        source="district.department.region.get_code_display",
+        label="Region Code")
+    district_code = serializers.CharField(source="district.code",
+                                          label="District Code")
+    department_code = serializers.CharField(
+        source="district.department.code",
+        label="Department Code")
+
     class Meta(AggsSerializer.Meta):
         model = Town
-        fields = AggsSerializer.Meta.fields + ("name", )
+        fields = AggsSerializer.Meta.fields + ("name",
+                                               "region_code",
+                                               "department_code",
+                                               "district_code")
