@@ -2,6 +2,21 @@
 
 This repository is a demonstration of using the Django REST Framework in order to create a simple REST API.
 
+**Table of Contents**
+
+- [Usage](#)
+- [Running Tests](#)
+- [The Stack](#)
+- [Available Endpoints](#)
+    - [/towns](#)
+    - [/aggs](#)
+- [Extensions](#)
+    - [Productising](#)
+    - [Documentation](#)
+    - [Providing An SDK](#)
+    - [Interraction With Other API Types](#)
+- [Task List](#)
+
 ## Usage
 
 The repository provides a (very simple) Dockerfile to run the API. It can be run using the following commands:
