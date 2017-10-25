@@ -1,0 +1,19 @@
+# Simple docker compose file to separate serving static and non-static files
+
+# Nginx to serve static files
+nginx:
+    build: ./nginx
+    volumes:
+        - .:/usr/src/app
+    links:
+        - django
+    ports:
+        - "80:80"
+
+# Django to serve dynamic content
+django:
+    build: .
+    volumes:
+        - .:/usr/src/app
+    expose:
+        - "8000"

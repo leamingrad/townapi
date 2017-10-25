@@ -19,10 +19,12 @@ This repository is a demonstration of using the Django REST Framework in order t
 
 ## Usage
 
-The repository provides a (very simple) Dockerfile to run the API. It can be run using the following commands:
+The repository provides a (very simple) Dockerfile to run the API. It can be run using the following commands (from the repository root):
 
-    $> docker build -t leamingrad/townapi .
-    $> docker run -p 8000:8000 leamingrad/townapi
+    $> docker-compose build
+    $> docker-compose up
+
+This will start to serve requests at `localhost` (port 80).
 
 For details of what endpoints are provided, see [Available Endpoints](#Available-Endpoints).
 
@@ -42,7 +44,16 @@ For details of this tests are declared, see [the api app tests](testapi/api/test
 
 This API is built as a Django application, using the Django Rest Framework to provide the REST API. It also makes use of django-filters for filtering, and Markdown for displaying the endpoint help.
 
-Since this is only a demonstration, the inbuild Django webserver and default sqlite database have been used - for what would be needed in production see [Productising](#Productising).
+
+The Django application is run using a Gunicorn server as its WSGI host, and an nginx server is used to proxy requests and serve static files. This is all run inside two Docker containers, orchestrated using docker-compose.
+
+This configuration is broadly ready for deployment, but some extra configuration decisions would need to be made depending on the deployment platform, such as:
+
+- What should be done about logging?
+- How many worker threads should be used?
+- What should be on the 404 page?
+
+Also, a production-ready database would need to be added - probably postgres SQL or similar for this sort of data.
 
 ## Available Endpoints
 
@@ -125,10 +136,9 @@ Each level of filtering is only available in the lower administrative divisions 
 ### Productising
 
 This repository contains a very basic API, and some of the code is a bit rough. To get it ready for production, the following would need to be done:
+
 - Tidy up aggregation class code (it should be possible to make use of inheritence more)
     - This may require framework extensions though, so is not urgent
-- Switch to a production-ready web server (probably Gunicorn)
-- Switch to a production-ready database (probably postgres SQL for this sort of data)
 - Add some overview documentation, and link to it
 
 ### Documentation

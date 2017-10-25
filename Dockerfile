@@ -1,36 +1,21 @@
 ##############################################################################
 # townapi
 # 
-# Simple Dockerfile to run the inbuilt Django web server
+# Simple Dockerfile to run the Django application
 #
-# VERSION          0.0.1
+# VERSION          0.0.2
 ##############################################################################
 
 # Set the base image as Python 3
-FROM python:3
+FROM python:3-onbuild
 
 LABEL maintainer="leamingrad"
 
 # Set environment variables
-ENV PYTHONUNBUFFERED 1
-ENV PROJECT_ROOT=/townapi/
-ENV DJANGO_DIR=./townapi
+ENV DJANGO_CONFIGURATION Docker
 
-# Move to the directory we are going to use
-RUN mkdir $PROJECT_ROOT
-WORKDIR $PROJECT_ROOT
+# Gather static files
+RUN ["python", "townapi/manage.py", "collectstatic", "--noinput"]
 
-COPY . $PROJECT_ROOT
-
-# Install the required Python packages
-ADD requirements.txt $PROJECT_ROOT
-RUN pip install -r requirements.txt
-
-# Copy in the Django code
-ADD $DJANGO_DIR $PROJECT_ROOT
-
-# Expose a port to listen on
-EXPOSE 8000
-
-# Add an entry point that will run the Django development server
-ENTRYPOINT ["python", "townapi/manage.py", "runserver", "0.0.0.0:8000"]
+# Running this container will start Gunicorn
+CMD ["gunicorn", "-c", "gunicorn_conf.py", "--chdir", "townapi", "townapi.wsgi:application", "--reload"]
