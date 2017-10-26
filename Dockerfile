@@ -15,7 +15,11 @@ LABEL maintainer="leamingrad"
 ENV DJANGO_CONFIGURATION Docker
 
 # Gather static files
-RUN ["python", "townapi/manage.py", "collectstatic", "--noinput"]
+WORKDIR townapi
+#RUN ["python", "manage.py", "collectstatic", "--noinput"]
+
+WORKDIR ..
 
 # Running this container will start Gunicorn
-CMD ["gunicorn", "-c", "gunicorn_conf.py", "--chdir", "townapi", "townapi.wsgi:application", "--reload"]
+#CMD ["gunicorn", "-c", "gunicorn_conf.py", "--chdir", "townapi", "townapi.wsgi:application", "--reload"]
+CMD ["./docker-entrypoint.sh"]
